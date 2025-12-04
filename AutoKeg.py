@@ -25,6 +25,12 @@ class MyBot(commands.Bot):
             application_id=os.getenv("APPLICATION_ID")
         )
 
+    async def on_error(self, event_method, *args, **kwargs):
+        # Generic event error logger to capture uncaught exceptions in event handlers
+        import traceback
+        print(f"Unhandled exception in event: {event_method}")
+        traceback.print_exc()
+
     async def setup_hook(self):
         # Load cogs
         await self.load_extension("cogs.general")

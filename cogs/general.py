@@ -48,6 +48,19 @@ class General(commands.Cog):
             # Keep prefix error handling simple and visible to the caller
             await ctx.send(f"Error: {e}")
 
+    # Log incoming interactions to help debug slash command delivery
+    @commands.Cog.listener()
+    async def on_interaction(self, interaction: discord.Interaction):
+        try:
+            name = None
+            # interaction.data may be None for non-application interactions
+            if getattr(interaction, "data", None):
+                # data can contain the command name for application commands
+                name = interaction.data.get("name") if isinstance(interaction.data, dict) else None
+            print(f"[interaction] id={getattr(interaction, 'id', None)} user={getattr(interaction, 'user', None)} name={name} type={getattr(interaction, 'type', None)}")
+        except Exception as e:
+            print(f"on_interaction logging failed: {e}")
+
     # Error handler
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
