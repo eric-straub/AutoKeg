@@ -22,6 +22,12 @@ class General(commands.Cog):
     async def echo(self, ctx, *, message: str):
         await ctx.send(message)
 
+    # Prefix command: !ping
+    @commands.command(name="ping")
+    async def ping(self, ctx, *, message: str):
+        latency = round(self.bot.latency * 1000)
+        await ctx.send(f"Pong! `{latency} ms`")
+
     # Error handler
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
