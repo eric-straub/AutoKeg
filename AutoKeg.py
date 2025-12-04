@@ -9,8 +9,8 @@ import logging
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 
-# Setup logging
-logging.basicConfig(level=logging.INFO)
+# Setup logging (DEBUG to capture gateway events when diagnosing interactions)
+logging.basicConfig(level=logging.DEBUG)
 
 # Bot Intents
 intents = discord.Intents.default()
@@ -30,6 +30,21 @@ class MyBot(commands.Bot):
         import traceback
         print(f"Unhandled exception in event: {event_method}")
         traceback.print_exc()
+
+    async def on_socket_response(self, msg):
+        """Log raw socket messages (t = event name). Useful to see INTERACTION_CREATE deliveries."""
+        try:
+            t = msg.get("t")
+            op = msg.get("op")
+            # Print only relevant events to avoid noise
+            if t in ("INTERACTION_CREATE", "APPLICATION_COMMAND_CREATE", "READY"):
+                print(f"[socket] t={t} op={op} d_keys={list(msg.get('d', {}).keys()) if isinstance(msg.get('d'), dict) else None}")
+            else:
+                # Short debug for other opcodes; keep minimal
+                if op is not None:
+                    print(f"[socket] op={op} t={t}")
+        except Exception as e:
+            print(f"on_socket_response logging failed: {e}")
 
     async def setup_hook(self):
         # Load cogs
