@@ -22,11 +22,16 @@ class General(commands.Cog):
     async def echo(self, ctx, *, message: str):
         await ctx.send(message)
 
-    # Prefix command: !ping
+    # Prefix command: !ping (checks latency)
     @commands.command(name="ping")
-    async def ping(self, ctx, *):
-        latency = round(self.bot.latency * 1000)
-        await ctx.send(f"Pong! `{latency} ms`")
+    async def ping_cmd(self, ctx):
+        """Responds with bot latency for prefix command usage (!ping)."""
+        try:
+            latency = round(self.bot.latency * 1000)
+            await ctx.send(f"Pong! `{latency} ms`")
+        except Exception as e:
+            # Keep prefix error handling simple and visible to the caller
+            await ctx.send(f"Error: {e}")
 
     # Error handler
     @commands.Cog.listener()
