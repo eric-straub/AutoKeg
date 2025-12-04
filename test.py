@@ -11,7 +11,7 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 class MyBot(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix="!", intents=discord.Intents.default())
-        self.tree = app_commands.CommandTree(self)
+        # self.tree = app_commands.CommandTree(self)
 
     async def setup_hook(self):
         # Register commands globally
