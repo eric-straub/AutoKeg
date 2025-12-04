@@ -29,9 +29,9 @@ class MyBot(commands.Bot):
         # Load cogs
         await self.load_extension("cogs.general")
 
-        # Sync slash commands
-        await self.tree.sync()
-        print("Slash commands synced.")
+        # # Sync slash commands
+        # await self.tree.sync()
+        # print("Slash commands synced.")
 
 # Create bot instance
 bot = MyBot()
@@ -40,6 +40,8 @@ bot = MyBot()
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user} (ID: {bot.user.id})")
+    await bot.tree.sync()
+    print("Slash commands synced.")
     print("Bot is ready.")
 
 
