@@ -58,7 +58,8 @@ class Parry(commands.Cog):
 
         # Build embed
         embed = discord.Embed(
-            title=f"Gwyn Parried! 🛡️",
+            # title=f"Gwyn Parried! 🛡️",
+            title=f"{interaction.user.display_name} Parried Gwyn!",
             description=msg,
             color=discord.Color.dark_gold()
         )
