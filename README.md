@@ -123,31 +123,6 @@ The bot automatically:
 
 ---
 
-## Testing the Rank System
-
-### Award XP
-
-Send a message in any channel.
-
-### Test Cooldown
-
-Send a second message within 10 seconds → no XP should be awarded.
-
-### Check leveling
-
-Edit `data/ranks.json` manually to simulate values and trigger level-ups.
-
-### Slash command testing
-
-```
-/rank
-/rank @user
-/leaderboard
-/test
-```
-
----
-
 ## Logging
 
 The bot logs:
