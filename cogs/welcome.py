@@ -129,6 +129,30 @@ class Welcome(commands.Cog):
         embed.add_field(name="Message", value=message or "(empty)", inline=False)
         await interaction.response.send_message(embed=embed)
 
+    @app_commands.command(name="welcome_help", description="Show help for configuring welcome messages")
+    async def welcome_help(self, interaction: discord.Interaction):
+        """Provide a short guide and examples for configuring the welcome message."""
+        help_text = (
+            "Welcome configuration guide:\n"
+            "\n"
+            "Placeholders you can use in messages:\n"
+            "- {user} — mention the new member\n"
+            "- {name} — the new member's display name\n"
+            "- {guild} — the server name\n"
+            "\n"
+            "Common commands:\n"
+            "- `/welcome_set message: Welcome {user} to {guild}!` — set the welcome text (enables messages).\n"
+            "- `/welcome_set_channel channel:#general` — post welcome messages to #general. Omit `channel` to DM new users.\n"
+            "- `/welcome_toggle enabled:false` — disable welcome messages for this server.\n"
+            "- `/welcome_show` — view current configuration.\n"
+            "\n"
+            "Tips:\n"
+            "- Keep messages short to avoid Discord limits.\n"
+            "- To include richer content (embeds, images), ask me to add embed-mode for welcome messages.\n"
+        )
+
+        await interaction.response.send_message(help_text, ephemeral=True)
+
 
 async def setup(bot):
     await bot.add_cog(Welcome(bot))
