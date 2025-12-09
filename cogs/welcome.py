@@ -153,41 +153,6 @@ class Welcome(commands.Cog):
 
         await interaction.response.send_message(help_text, ephemeral=True)
 
-    @app_commands.command(name="welcome", description="Preview the welcome message as it would appear to a new user")
-    async def welcome(self, interaction: discord.Interaction, member: discord.Member = None):
-        """Preview the configured welcome message for a member (ephemeral).
-
-        If `member` is omitted, previews for the invoking user.
-        """
-        if not interaction.guild:
-            await interaction.response.send_message("This command must be used in a server.", ephemeral=True)
-            return
-
-        member = member or interaction.user
-        gid = str(interaction.guild.id)
-        cfg = self.config.get(gid)
-        if not cfg:
-            await interaction.response.send_message("No welcome configuration set for this server.", ephemeral=True)
-            return
-
-        enabled = cfg.get("enabled", False)
-        message = cfg.get("message", "Welcome {user} to {guild}!")
-        formatted = message.replace("{user}", member.mention).replace("{name}", member.display_name).replace("{guild}", interaction.guild.name)
-
-        channel_id = cfg.get("channel_id")
-        if channel_id is None:
-            where = "DMs"
-        else:
-            ch = interaction.guild.get_channel(int(channel_id))
-            where = ch.mention if ch else f"(missing channel {channel_id})"
-
-        embed = discord.Embed(title="Welcome Preview", color=discord.Color.green())
-        embed.add_field(name="Destination", value=where, inline=True)
-        embed.add_field(name="Enabled", value=str(enabled), inline=True)
-        embed.add_field(name="Preview", value=formatted, inline=False)
-
-        await interaction.response.send_message(embed=embed, ephemeral=True)
-
 
 async def setup(bot):
     await bot.add_cog(Welcome(bot))
