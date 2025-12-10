@@ -22,6 +22,21 @@ ffmpeg_options = {
 
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
+# Allow using a cookies file for authenticated extraction (useful when YouTube requires login)
+# Priority: environment variable `YTDL_COOKIEFILE` -> `data/cookies.txt` if it exists
+cookiefile = os.getenv("YTDL_COOKIEFILE")
+if not cookiefile:
+    default_cookie = os.path.join("data", "cookies.txt")
+    if os.path.exists(default_cookie):
+        cookiefile = default_cookie
+
+if cookiefile and os.path.exists(cookiefile):
+    # add cookiefile to ytdl options and recreate the YoutubeDL instance
+    ytdl_format_options = dict(ytdl_format_options)
+    ytdl_format_options["cookiefile"] = cookiefile
+    ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
+    print(f"yt-dlp: using cookiefile={cookiefile}")
+
 
 class YTDLSource:
     def __init__(self, data, requester):
