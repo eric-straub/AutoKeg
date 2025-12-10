@@ -48,6 +48,37 @@ class General(commands.Cog):
             # Keep prefix error handling simple and visible to the caller
             await ctx.send(f"Error: {e}")
 
+    # Slash command: /server_stats — show basic guild statistics
+    @app_commands.command(name="server_stats", description="Show basic server statistics")
+    async def server_stats(self, interaction: discord.Interaction):
+        guild = interaction.guild
+        if not guild:
+            await interaction.response.send_message("This command must be used in a server (guild).", ephemeral=True)
+            return
+
+        total = guild.member_count
+        bots = sum(1 for m in guild.members if m.bot)
+        humans = total - bots
+        online = sum(1 for m in guild.members if getattr(m, "status", discord.Status.offline) != discord.Status.offline)
+        text_channels = len([c for c in guild.channels if isinstance(c, discord.TextChannel)])
+        voice_channels = len([c for c in guild.channels if isinstance(c, discord.VoiceChannel)])
+        roles = len(guild.roles)
+        owner = guild.owner
+
+        embed = discord.Embed(title=f"{guild.name} — Server Stats", color=discord.Color.blurple())
+        embed.set_thumbnail(url=guild.icon.url if guild.icon else None)
+        embed.add_field(name="Total Members", value=str(total))
+        embed.add_field(name="Humans", value=str(humans))
+        embed.add_field(name="Bots", value=str(bots))
+        embed.add_field(name="Online (approx)", value=str(online))
+        embed.add_field(name="Text Channels", value=str(text_channels))
+        embed.add_field(name="Voice Channels", value=str(voice_channels))
+        embed.add_field(name="Roles", value=str(roles))
+        embed.add_field(name="Owner", value=owner.mention if owner else "Unknown")
+        embed.set_footer(text=f"Created: {guild.created_at.date()}")
+
+        await interaction.response.send_message(embed=embed)
+
     # Log incoming interactions to help debug slash command delivery
     @commands.Cog.listener()
     async def on_interaction(self, interaction: discord.Interaction):
