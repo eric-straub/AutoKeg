@@ -61,7 +61,6 @@ class MyBot(commands.Bot):
         await self.load_extension("cogs.general")
         await self.load_extension("cogs.rank")
         await self.load_extension("cogs.welcome")
-        await self.load_extension("cogs.music")
 
 
 # Create bot instance

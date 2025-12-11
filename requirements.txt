@@ -1,5 +1,2 @@
 discord.py
 python-dotenv
-pynacl
-yt-dlp
-js2py
